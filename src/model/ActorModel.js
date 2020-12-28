@@ -9,9 +9,10 @@ class ActorModel {
     }
 
     calculateAge() { // birthday is a date
-        var ageDifMs = Date.now() - this.birthday.getTime();
-        var ageDate = new Date(ageDifMs); // miliseconds from epoch
-        return Math.abs(ageDate.getUTCFullYear() - 1970);
+        var today = new Date();
+        var birthDate = new Date(this.birthday);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        return age;
     }
 
 }
