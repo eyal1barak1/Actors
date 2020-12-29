@@ -1,5 +1,5 @@
 import './ActorCard.css';
-import { Card, Button, Col } from 'react-bootstrap';
+import { Card, Col } from 'react-bootstrap';
 
 function ActorCard(props) {
     const { actor } = props;
