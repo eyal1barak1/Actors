@@ -12,25 +12,15 @@ function ActorPage() {
     ];
 
     const [ActorsData, setActorsData] = useState(ActorsArray);
+    const [filteredText, setFilteredText] = useState("");
+    const filteredActors = ActorsData.filter(actor =>
+        actor.first_name.toLowerCase().includes(filteredText.toLowerCase()) ||
+        actor.last_name.toLowerCase().includes(filteredText.toLowerCase()));
 
-    let ActorCardsarr = ActorsData.map(actor => <ActorCard actor={actor} />);
+    let ActorCardsarr = filteredActors.map(actor => <ActorCard actor={actor} />);
     let temp_actor_arr = [];
 
-    function UpdateActors(e) {
-        let actor_name = e.target.value;
-        
-
-        ActorsArray.forEach(myFunction);
-
-        function myFunction(item) {
-            if (item.first_name.toLowerCase().includes(actor_name.toLowerCase())) {
-                temp_actor_arr.push(item);
-            }
-
-        }
-
-        setActorsData(temp_actor_arr);
-    }
+    
 
     function compareFirst() {
         var checkBox = document.getElementById("first");
@@ -73,7 +63,7 @@ function ActorPage() {
     return (
         <Container>
             <Row>
-                <InputGroup size="sm" className="mb-3" onChange={UpdateActors}>
+                <InputGroup size="sm" className="mb-3" onChange={e => setFilteredText(e.target.value)} value={filteredText}>
                     <InputGroup.Prepend>
                         <InputGroup.Text id="inputGroup-sizing-sm">Filter Actor</InputGroup.Text>
                     </InputGroup.Prepend>
