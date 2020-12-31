@@ -1,17 +1,14 @@
-import { useState } from 'react';
+ 
+import { useEffect, useState } from 'react';
 import ActorModel from '../model/ActorModel';
 import ActorCard from '../components/ActorCard/ActorCard'
 import { Container, Row, Col, InputGroup, FormControl, Form } from 'react-bootstrap';
+import axios from 'axios';
 
 
 function ActorPage() {
 
-    let ActorsArray = [new ActorModel("Anya", "Taylor-Joy", "1992-04-16", "https://m.media-amazon.com/images/M/MV5BYWUxMzhlM2QtNDM5MS00OThlLTlhZDEtMDhlNTliZDIzZGQ1XkEyXkFqcGdeQXVyNzcyNzc0NzE@._V1_UY317_CR19,0,214,317_AL_.jpg", "https://www.imdb.com/name/nm5896355/?ref_=tt_cl_t1"),
-    new ActorModel("Russell", "Crowe", "1964-07-04", "https://m.media-amazon.com/images/M/MV5BMTQyMTExNTMxOF5BMl5BanBnXkFtZTcwNDg1NzkzNw@@._V1_UX214_CR0,0,214,317_AL_.jpg", "https://www.imdb.com/name/nm0000128/?ref_=nv_sr_srsg_0"),
-    new ActorModel("Brad", "Pitt", "1963-12-18", "https://m.media-amazon.com/images/M/MV5BMjA1MjE2MTQ2MV5BMl5BanBnXkFtZTcwMjE5MDY0Nw@@._V1_UX214_CR0,0,214,317_AL_.jpg", "https://www.imdb.com/name/nm0000093/?ref_=nv_sr_srsg_0"),
-    ];
-
-    const [ActorsData, setActorsData] = useState(ActorsArray);
+    const [ActorsData, setActorsData] = useState([]);
     const [filteredText, setFilteredText] = useState("");
     const filteredActors = ActorsData.filter(actor =>
         actor.first_name.toLowerCase().includes(filteredText.toLowerCase()) ||
@@ -20,33 +17,38 @@ function ActorPage() {
     let ActorCardsarr = filteredActors.map(actor => <ActorCard actor={actor} />);
     let temp_actor_arr = [];
 
-    
+    useEffect(() => {
+        
+        axios.get("actors.json").then(res=>{
+            setActorsData(res.data.map(single_actor => new ActorModel(single_actor)));
+        });
+    }, []);
 
     function compareFirst() {
         var checkBox = document.getElementById("first");
         if (checkBox.checked === true) {
-            ActorsArray.sort(function (a, b) {
+            ActorsData.sort(function (a, b) {
                 var x = a.first_name.toLowerCase();
                 var y = b.first_name.toLowerCase();
                 if (x < y) { return -1; }
                 if (x > y) { return 1; }
                 return 0;
             });
-            ActorsArray.forEach(item => temp_actor_arr.push(item));         
+            ActorsData.forEach(item => temp_actor_arr.push(item));
             setActorsData(temp_actor_arr);
         }
     }
     function compareLast() {
         var checkBox = document.getElementById("last");
         if (checkBox.checked === true) {
-            ActorsArray.sort(function (a, b) {
+            ActorsData.sort(function (a, b) {
                 var x = a.last_name.toLowerCase();
                 var y = b.last_name.toLowerCase();
                 if (x < y) { return -1; }
                 if (x > y) { return 1; }
                 return 0;
             });
-            ActorsArray.forEach(item => temp_actor_arr.push(item));         
+            ActorsData.forEach(item => temp_actor_arr.push(item));
             setActorsData(temp_actor_arr);
         }
     }
@@ -54,8 +56,8 @@ function ActorPage() {
     function compareAge() {
         var checkBox = document.getElementById("age");
         if (checkBox.checked === true) {
-            ActorsArray.sort(function (a, b) { return a.calculateAge() - b.calculateAge() });
-            ActorsArray.forEach(item => temp_actor_arr.push(item));         
+            ActorsData.sort(function (a, b) { return a.calculateAge() - b.calculateAge() });
+            ActorsData.forEach(item => temp_actor_arr.push(item));
             setActorsData(temp_actor_arr);
         }
     }
