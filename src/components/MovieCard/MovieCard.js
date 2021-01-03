@@ -5,7 +5,7 @@ function MovieCard(props) {
     const { movie } = props;
 
     return (
-        <Row>
+        <Row style={{backgroundColor: "#FFE4C4"}}>
             <Col xs={6} md={3}>
                 <Image src={movie.Poster} rounded />
             </Col>
